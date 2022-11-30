@@ -6,6 +6,7 @@
     "@emotion/react": "^11.10.5",
     "@mantine/carousel": "^5.8.2",
     "@mantine/core": "^5.8.2",
+    "@mantine/form": "^5.8.2",
     "@mantine/hooks": "^5.8.2",
     "@tabler/icons": "^1.112.0",
     "@testing-library/jest-dom": "^5.16.5",
