@@ -191,17 +191,19 @@ const HeaderLayout = () => {
                       <IconShoppingCart size={25} />
                     </ActionIcon>
                   </Indicator>
-                  <UnstyledButton>
-                    <Group>
-                      <Avatar size={35} color='blue'></Avatar>
-                      <div>
-                        <Text>{user.user.full_name.split(' ')[0]}</Text>
-                        <Text size='xs' color='dimmed'>
-                          see more details
-                        </Text>
-                      </div>
-                    </Group>
-                  </UnstyledButton>
+                  <Link to='/profile'>
+                    <UnstyledButton>
+                      <Group>
+                        <Avatar size={35} color='blue'></Avatar>
+                        <div>
+                          <Text>{user.user.full_name.split(' ')[0]}</Text>
+                          <Text size='xs' color='dimmed'>
+                            see more details
+                          </Text>
+                        </div>
+                      </Group>
+                    </UnstyledButton>
+                  </Link>
                 </>
               ) : (
                 <>
