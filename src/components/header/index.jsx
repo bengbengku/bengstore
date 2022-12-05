@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Header,
   HoverCard,
@@ -18,6 +19,9 @@ import {
   ScrollArea,
   TextInput,
   Kbd,
+  Avatar,
+  ActionIcon,
+  Indicator,
 } from '@mantine/core';
 import {
   IconAward,
@@ -26,9 +30,13 @@ import {
   IconCoffee,
   IconChevronDown,
   IconSearch,
+  IconShoppingCart,
 } from '@tabler/icons';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { headerStyles } from '../../styles/headerStyles';
+import RegisterModal from '../../pages/login/RegisterModal';
+import LoginModal from '../../pages/login/LoginModal';
+import { useSelector } from 'react-redux';
 
 const mockdata = [
   {
@@ -54,6 +62,10 @@ const mockdata = [
 ];
 
 const HeaderLayout = () => {
+  const { user } = useSelector((user) => ({ ...user }));
+  const { cart } = useSelector((cart) => cart);
+  const [isRegister, setIsRegister] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
   const { classes, theme } = headerStyles();
@@ -78,7 +90,12 @@ const HeaderLayout = () => {
   ));
 
   const rightSection = (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
       <Kbd>Ctrl</Kbd>
       <span style={{ margin: '0 5px' }}>+</span>
       <Kbd>K</Kbd>
@@ -86,119 +103,168 @@ const HeaderLayout = () => {
   );
 
   return (
-    <Box>
-      <Header height={60} px={largeScreen ? 100 : 'md'}>
-        <Group position='apart' sx={{ height: '100%' }}>
-          <img src='../../../logo.png' alt='Bengstore' className={classes.img_wrap} />
+    <>
+      <Box>
+        <Header
+          height={60}
+          px={largeScreen ? 100 : 'md'}
+          style={{
+            position: 'fixed',
+            top: 0,
+            zIndex: 999,
+          }}
+        >
+          <Group position='apart' sx={{ height: '100%' }}>
+            <img src='../../../logo.png' alt='Bengstore' className={classes.img_wrap} />
 
-          <Group sx={{ height: '100%' }} spacing={0} className={classes.hiddenMobile}>
-            <a href='#' className={classes.link}>
-              Beranda
-            </a>
-            <HoverCard width={600} position='bottom' radius='md' shadow='md' withinPortal>
-              <HoverCard.Target>
-                <a href='#' className={classes.link}>
-                  <Center inline>
-                    <Box component='span' mr={5}>
-                      Kategori
-                    </Box>
-                    <IconChevronDown size={16} color={theme.fn.primaryColor()} />
-                  </Center>
-                </a>
-              </HoverCard.Target>
+            <Group sx={{ height: '100%' }} spacing={0} className={classes.hiddenMobile}>
+              <Link to='/' className={classes.link}>
+                Beranda
+              </Link>
+              <HoverCard width={600} position='bottom' radius='md' shadow='md' withinPortal>
+                <HoverCard.Target>
+                  <Link to='/' className={classes.link}>
+                    <Center inline>
+                      <Box component='span' mr={5}>
+                        Kategori
+                      </Box>
+                      <IconChevronDown size={16} color={theme.fn.primaryColor()} />
+                    </Center>
+                  </Link>
+                </HoverCard.Target>
 
-              <HoverCard.Dropdown sx={{ overflow: 'hidden' }}>
-                <Group position='apart' px='md'>
-                  <Text weight={500}>List Kategori</Text>
-                  <Anchor href='#' size='xs'>
-                    View all
-                  </Anchor>
-                </Group>
-
-                <Divider
-                  my='sm'
-                  mx='-md'
-                  color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'}
-                />
-
-                <SimpleGrid cols={2} spacing={0}>
-                  {links}
-                </SimpleGrid>
-
-                <div className={classes.dropdownFooter}>
-                  <Group position='apart'>
-                    <div>
-                      <Text weight={500} size='sm'>
-                        Get started
-                      </Text>
-                      <Text size='xs' color='dimmed'>
-                        Their food sources have decreased, and their numbers
-                      </Text>
-                    </div>
-                    <Button variant='default'>Get started</Button>
+                <HoverCard.Dropdown sx={{ overflow: 'hidden' }}>
+                  <Group position='apart' px='md'>
+                    <Text weight={500}>List Kategori</Text>
+                    <Anchor href='#' size='xs'>
+                      View all
+                    </Anchor>
                   </Group>
-                </div>
-              </HoverCard.Dropdown>
-            </HoverCard>
-            <TextInput
-              placeholder='Search'
-              icon={<IconSearch size={16} />}
-              rightSectionWidth={90}
-              rightSection={rightSection}
-              styles={{ rightSection: { pointerEvents: 'none' } }}
-              ml={8}
+
+                  <Divider
+                    my='sm'
+                    mx='-md'
+                    color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'}
+                  />
+
+                  <SimpleGrid cols={2} spacing={0}>
+                    {links}
+                  </SimpleGrid>
+
+                  <div className={classes.dropdownFooter}>
+                    <Group position='apart'>
+                      <div>
+                        <Text weight={500} size='sm'>
+                          Get started
+                        </Text>
+                        <Text size='xs' color='dimmed'>
+                          Their food sources have decreased, and their numbers
+                        </Text>
+                      </div>
+                      <Button variant='default'>Get started</Button>
+                    </Group>
+                  </div>
+                </HoverCard.Dropdown>
+              </HoverCard>
+              <TextInput
+                placeholder='Search'
+                icon={<IconSearch size={16} />}
+                rightSectionWidth={90}
+                rightSection={rightSection}
+                styles={{ rightSection: { pointerEvents: 'none' } }}
+                ml={8}
+              />
+            </Group>
+
+            <Group className={classes.hiddenMobile}>
+              {user?.user ? (
+                <>
+                  {' '}
+                  <Link to='/cart'>
+                    <Indicator
+                      label={cart?.length}
+                      showZero={false}
+                      dot={false}
+                      overflowCount={999}
+                      inline
+                      size={18}
+                    >
+                      <ActionIcon variant='transparent'>
+                        <IconShoppingCart size={25} />
+                      </ActionIcon>
+                    </Indicator>
+                  </Link>
+                  <Link to='/profile'>
+                    <UnstyledButton>
+                      <Group>
+                        <Avatar size={35} color='blue'></Avatar>
+                        <div>
+                          <Text>{user.user.full_name.split(' ')[0]}</Text>
+                          <Text size='xs' color='dimmed'>
+                            see more details
+                          </Text>
+                        </div>
+                      </Group>
+                    </UnstyledButton>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Button variant='default' onClick={() => setIsLogin(true)}>
+                    Log in
+                  </Button>
+                  <Button onClick={() => setIsRegister(true)}>Sign up</Button>
+                </>
+              )}
+            </Group>
+
+            <Burger
+              opened={drawerOpened}
+              onClick={toggleDrawer}
+              className={classes.hiddenDesktop}
             />
           </Group>
+        </Header>
 
-          <Group className={classes.hiddenMobile}>
-            <Button variant='default'>Log in</Button>
-            <Button>Sign up</Button>
-          </Group>
+        <Drawer
+          opened={drawerOpened}
+          onClose={closeDrawer}
+          size='100%'
+          padding='md'
+          title='bStore'
+          className={classes.hiddenDesktop}
+          zIndex={99}
+        >
+          <ScrollArea sx={{ height: 'calc(100vh - 60px)' }} mx='-md'>
+            <Divider my='sm' color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
 
-          <Burger opened={drawerOpened} onClick={toggleDrawer} className={classes.hiddenDesktop} />
-        </Group>
-      </Header>
+            <Link to='/' className={classes.link}>
+              Beranda
+            </Link>
+            <UnstyledButton className={classes.link} onClick={toggleLinks}>
+              <Center inline>
+                <Box component='span' mr={5}>
+                  Features
+                </Box>
+                <IconChevronDown size={16} color={theme.fn.primaryColor()} />
+              </Center>
+            </UnstyledButton>
+            <Collapse in={linksOpened}>{links}</Collapse>
 
-      <Drawer
-        opened={drawerOpened}
-        onClose={closeDrawer}
-        size='100%'
-        padding='md'
-        title='bStore'
-        className={classes.hiddenDesktop}
-        zIndex={1000000}
-      >
-        <ScrollArea sx={{ height: 'calc(100vh - 60px)' }} mx='-md'>
-          <Divider my='sm' color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
+            <Divider my='sm' color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
 
-          <a href='#' className={classes.link}>
-            Home
-          </a>
-          <UnstyledButton className={classes.link} onClick={toggleLinks}>
-            <Center inline>
-              <Box component='span' mr={5}>
-                Features
-              </Box>
-              <IconChevronDown size={16} color={theme.fn.primaryColor()} />
-            </Center>
-          </UnstyledButton>
-          <Collapse in={linksOpened}>{links}</Collapse>
-          <a href='#' className={classes.link}>
-            Learn
-          </a>
-          <a href='#' className={classes.link}>
-            Academy
-          </a>
-
-          <Divider my='sm' color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
-
-          <Group position='center' grow pb='xl' px='md'>
-            <Button variant='default'>Log in</Button>
-            <Button>Sign up</Button>
-          </Group>
-        </ScrollArea>
-      </Drawer>
-    </Box>
+            <Group position='center' grow pb='xl' px='md'>
+              <Button variant='default' onClick={() => setIsLogin(true)}>
+                Log in
+              </Button>
+              <Button onClick={() => setIsRegister(true)}>Sign up</Button>
+            </Group>
+          </ScrollArea>
+        </Drawer>
+      </Box>
+      {isRegister && <RegisterModal isRegister={isRegister} setIsRegister={setIsRegister} />}
+      {isLogin && <LoginModal isLogin={isLogin} setIsLogin={setIsLogin} />}
+    </>
   );
 };
 
