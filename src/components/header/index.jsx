@@ -63,9 +63,9 @@ const mockdata = [
 
 const HeaderLayout = () => {
   const { user } = useSelector((user) => ({ ...user }));
+  const { cart } = useSelector((cart) => cart);
   const [isRegister, setIsRegister] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
-  const [count, setCount] = useState(1);
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
   const { classes, theme } = headerStyles();
@@ -111,6 +111,7 @@ const HeaderLayout = () => {
           style={{
             position: 'fixed',
             top: 0,
+            zIndex: 999,
           }}
         >
           <Group position='apart' sx={{ height: '100%' }}>
@@ -179,18 +180,20 @@ const HeaderLayout = () => {
               {user?.user ? (
                 <>
                   {' '}
-                  <Indicator
-                    label={count}
-                    showZero={false}
-                    dot={false}
-                    overflowCount={999}
-                    inline
-                    size={18}
-                  >
-                    <ActionIcon variant='transparent'>
-                      <IconShoppingCart size={25} />
-                    </ActionIcon>
-                  </Indicator>
+                  <Link to='/cart'>
+                    <Indicator
+                      label={cart?.length}
+                      showZero={false}
+                      dot={false}
+                      overflowCount={999}
+                      inline
+                      size={18}
+                    >
+                      <ActionIcon variant='transparent'>
+                        <IconShoppingCart size={25} />
+                      </ActionIcon>
+                    </Indicator>
+                  </Link>
                   <Link to='/profile'>
                     <UnstyledButton>
                       <Group>

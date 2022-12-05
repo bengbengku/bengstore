@@ -4,6 +4,7 @@ import Home from './pages/home';
 import { MantineProvider } from '@mantine/core';
 import RegisterLanding from './components/registerLanding';
 import Profile from './pages/profile';
+import Cart from './pages/cart';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path='/' element={<Home />} exact />
         <Route path='/landing' element={<RegisterLanding />} exact />
         <Route path='/profile' element={<Profile />} exact />
+        <Route path='/cart' element={<Cart />} exact />
       </Routes>
     </MantineProvider>
   );
