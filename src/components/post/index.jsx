@@ -1,12 +1,19 @@
-import { ActionIcon, Avatar, Badge, Button, Card, Group, Image, Text } from '@mantine/core';
+import { Avatar, Badge, Button, Card, Group, Image, Text } from '@mantine/core';
 import { IconShoppingCartPlus } from '@tabler/icons';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { postStyles } from '../../styles/postStyles';
 
 const Post = () => {
-  const { classes, theme } = postStyles();
+  const cartItems = useSelector((cart) => cart);
+  const { cart } = cartItems;
+  const dispatch = useDispatch();
+  const [addCart, setAddCart] = useState([]);
+  const { classes } = postStyles();
   const [data, setData] = useState([]);
+
   useEffect(() => {
     getAllProduct();
   }, []);
@@ -23,6 +30,13 @@ const Post = () => {
     currency: 'IDR',
     minimumFractionDigits: 0,
   });
+
+  const addCartHandler = (data) => {
+    setAddCart([...addCart, data]);
+    dispatch({ type: 'ADD_CART', payload: data });
+    Cookies.set('cart', JSON.stringify([...cart, data]));
+  };
+
   return (
     <>
       {data?.map((i) => (
@@ -62,6 +76,7 @@ const Post = () => {
                   variant='gradient'
                   gradient={{ from: 'indigo', to: 'cyan' }}
                   size='xs'
+                  onClick={() => addCartHandler(i)}
                 >
                   Masukan Keranjang
                 </Button>

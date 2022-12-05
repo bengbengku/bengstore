@@ -39,7 +39,6 @@ const LoginModal = ({ isLogin, setIsLogin }) => {
           password: val.password,
         })
       );
-      console.log(data);
       dispatch({ type: 'LOGIN', payload: data });
       Cookies.set('user', JSON.stringify(data));
       setLoading(false);

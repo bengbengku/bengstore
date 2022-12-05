@@ -36,7 +36,6 @@ const RegisterModal = ({ isRegister, setIsRegister }) => {
         email: val.email,
         password: val.password,
       });
-      console.log(data);
       setLoading(false);
       setTimeout(() => {
         navigate('/landing');
