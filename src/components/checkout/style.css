@@ -1,0 +1,14 @@
+td {
+  text-align: center;
+}
+thead tr th {
+  text-align: center !important;
+}
+
+.counter_wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100px;
+  transform: translateX(10px);
+}

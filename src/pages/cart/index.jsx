@@ -1,12 +1,17 @@
-import { Button, Center, Container, Group, Stepper } from '@mantine/core';
+import { Button, Container, Group, Stepper } from '@mantine/core';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import Checkout from '../../components/checkout';
 import HeaderLayout from '../../components/header';
 import './style.css';
 
 const Cart = () => {
-  const [active, setActive] = useState(1);
+  const { cart } = useSelector((cart) => cart);
+  const [count, setCount] = useState(1);
+  const [active, setActive] = useState(0);
   const nextStep = () => setActive((current) => (current < 3 ? current + 1 : current));
   const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
+
   return (
     <>
       <HeaderLayout />
@@ -18,7 +23,7 @@ const Cart = () => {
               description='Konfirmasi Orderan'
               allowStepSelect={active > 0}
             >
-              <Center>Step 1 content: Create an account</Center>
+              <Checkout cart={cart} count={count} setCount={setCount} />
             </Stepper.Step>
             <Stepper.Step
               label='Second step'
@@ -41,9 +46,9 @@ const Cart = () => {
 
           <Group position='center' mt='xl'>
             <Button variant='default' onClick={prevStep}>
-              Back
+              Kembali
             </Button>
-            <Button onClick={nextStep}>Next step</Button>
+            <Button onClick={nextStep}>Selanjutnya</Button>
           </Group>
         </div>
       </Container>
