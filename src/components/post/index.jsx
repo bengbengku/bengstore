@@ -8,11 +8,11 @@ import { postStyles } from '../../styles/postStyles';
 
 const Post = () => {
   const cartItems = useSelector((cart) => cart);
-  const { cart } = cartItems;
+  const { cart, user } = cartItems;
   const dispatch = useDispatch();
   const [addCart, setAddCart] = useState([]);
-  const { classes } = postStyles();
   const [data, setData] = useState([]);
+  const { classes } = postStyles();
 
   useEffect(() => {
     getAllProduct();
@@ -31,12 +31,26 @@ const Post = () => {
     minimumFractionDigits: 0,
   });
 
-  const addCartHandler = (data) => {
-    setAddCart([...addCart, data]);
-    dispatch({ type: 'ADD_CART', payload: data });
-    Cookies.set('cart', JSON.stringify([...cart, data]));
+  const addCartHandler = async (item) => {
+    try {
+      dispatch({ type: 'ADD_CART', payload: item });
+      Cookies.set('cart', JSON.stringify([...cart, item]));
+      setAddCart([...addCart, item]);
+      console.log('PUT Res: ', cart);
+      const { data } = await axios.put(
+        `${process.env.REACT_APP_BACKEND_URL}/api/carts`,
+        { cart },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+    } catch (err) {
+      return err.response.data.message;
+    }
   };
-
+  console.log(cart);
   return (
     <>
       {data?.map((i) => (
