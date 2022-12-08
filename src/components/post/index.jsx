@@ -35,11 +35,10 @@ const Post = () => {
     try {
       dispatch({ type: 'ADD_CART', payload: item });
       Cookies.set('cart', JSON.stringify([...cart, item]));
-      setAddCart([...addCart, item]);
-      console.log('PUT Res: ', cart);
+      let tmpCart = [...addCart, item];
       const { data } = await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}/api/carts`,
-        { cart },
+        { cart: tmpCart },
         {
           headers: {
             Authorization: `Bearer ${user.token}`,
