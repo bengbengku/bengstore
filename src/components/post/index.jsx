@@ -1,4 +1,5 @@
 import { Avatar, Badge, Button, Card, Group, Image, Text } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
 import { IconShoppingCartPlus } from '@tabler/icons';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -7,12 +8,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { postStyles } from '../../styles/postStyles';
 
 const Post = () => {
-  const cartItems = useSelector((cart) => cart);
-  const { cart } = cartItems;
+  const items = useSelector((item) => item);
+  const { cart } = items;
   const dispatch = useDispatch();
-  const [addCart, setAddCart] = useState([]);
-  const { classes } = postStyles();
   const [data, setData] = useState([]);
+  const { classes } = postStyles();
 
   useEffect(() => {
     getAllProduct();
@@ -31,10 +31,35 @@ const Post = () => {
     minimumFractionDigits: 0,
   });
 
-  const addCartHandler = (data) => {
-    setAddCart([...addCart, data]);
-    dispatch({ type: 'ADD_CART', payload: data });
-    Cookies.set('cart', JSON.stringify([...cart, data]));
+  const addCartHandler = (item) => {
+    const findCart = cart.find((obj) => {
+      return obj._id === item._id;
+    });
+
+    if (findCart) {
+      showNotification({
+        title: 'Oops...',
+        message: 'Produk ini sudah ditambahkan! 🤥',
+        styles: (theme) => ({
+          root: {
+            backgroundColor: theme.colors.red[6],
+            borderColor: theme.colors.red[6],
+
+            '&::before': { backgroundColor: theme.white },
+          },
+
+          title: { color: theme.white },
+          description: { color: theme.white },
+          closeButton: {
+            color: theme.white,
+            '&:hover': { backgroundColor: theme.colors.red[7] },
+          },
+        }),
+      });
+    } else {
+      Cookies.set('cart', JSON.stringify([...cart, { ...item, qty: 1 }]));
+      dispatch({ type: 'ADD_CART', payload: { ...item, qty: 1 } });
+    }
   };
 
   return (

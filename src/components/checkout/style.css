@@ -1,0 +1,41 @@
+td {
+  text-align: center;
+}
+thead tr th {
+  text-align: center !important;
+}
+
+.counter_wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100px;
+  transform: translateX(10px);
+}
+
+.confirm_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #25262b;
+  padding-bottom: 1.2rem;
+  border-radius: 8px;
+  transform: translateX(8px);
+  box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px,
+    rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px,
+    rgba(0, 0, 0, 0.09) 0px 32px 16px;
+}
+
+.confirm_wrap {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  margin-top: 20px;
+}
+
+.confirm_wrap .confirm_text:nth-child(2) {
+  width: 400px;
+}
+.confirm_wrap .confirm_text:nth-child(1) {
+  width: 150px;
+}
