@@ -80,9 +80,10 @@ const Address = () => {
     try {
       const data = {
         nama: val.name,
-        kabupaten: cityRef.current.defaultValue,
+        kota: cityRef.current.defaultValue,
         provinsi: provRef.current.defaultValue,
         detail: val.detailAddress,
+        code_kota: idKota,
       };
       setLoading(true);
       await createAddress(data, user.token);
@@ -199,7 +200,7 @@ const Address = () => {
                 <ListAddress
                   name={data.nama}
                   detail={data.detail}
-                  kota={data.kabupaten}
+                  kota={data.kota}
                   provinsi={data.provinsi}
                 />
               </Grid.Col>

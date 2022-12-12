@@ -8,6 +8,7 @@
     "@mantine/core": "^5.8.2",
     "@mantine/form": "^5.8.2",
     "@mantine/hooks": "^5.8.2",
+    "@mantine/notifications": "^5.9.2",
     "@tabler/icons": "^1.112.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
