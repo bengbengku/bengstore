@@ -30,7 +30,7 @@ import {
   IconCoffee,
   IconChevronDown,
   IconSearch,
-  IconShoppingCart,
+  IconShoppingBag,
 } from '@tabler/icons';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { headerStyles } from '../../styles/headerStyles';
@@ -190,7 +190,7 @@ const HeaderLayout = () => {
                       size={18}
                     >
                       <ActionIcon variant='transparent'>
-                        <IconShoppingCart size={25} />
+                        <IconShoppingBag size={25} />
                       </ActionIcon>
                     </Indicator>
                   </Link>
