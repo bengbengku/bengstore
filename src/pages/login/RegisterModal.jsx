@@ -3,14 +3,12 @@ import { useState } from 'react';
 import axios from 'axios';
 import { Button, Modal, PasswordInput, TextInput, useMantineTheme } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { registerStyles } from '../../styles/registerStyles';
 import { useNavigate } from 'react-router-dom';
 
 const RegisterModal = ({ isRegister, setIsRegister }) => {
   const navigate = useNavigate();
   const [opened, setOpened] = useState(isRegister);
   const [loading, setLoading] = useState(false);
-  const { classes } = registerStyles();
   const theme = useMantineTheme();
 
   const form = useForm({
