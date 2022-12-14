@@ -1,4 +1,4 @@
-import { ActionIcon, Avatar, Button, Center, Group, Paper, Text } from '@mantine/core';
+import { ActionIcon, Avatar, Center, Group, Paper, Text } from '@mantine/core';
 import { IconBrandInstagram, IconBrandTwitter, IconBrandYoutube } from '@tabler/icons';
 import React from 'react';
 import { useSelector } from 'react-redux';

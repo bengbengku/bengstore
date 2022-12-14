@@ -1,4 +1,4 @@
-import { Center, Container, SimpleGrid } from '@mantine/core';
+import { Center, SimpleGrid } from '@mantine/core';
 import React from 'react';
 import Footer from '../../components/footer';
 import HeaderLayout from '../../components/header';
@@ -20,6 +20,7 @@ const Home = () => {
             { maxWidth: 'xs', cols: 1, spacing: 'sm' },
           ]}
         >
+          {/* <Text mt='4rem'>Tags</Text> */}
           <Post />
         </SimpleGrid>
       </Center>

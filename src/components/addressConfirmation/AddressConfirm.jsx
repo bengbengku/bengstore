@@ -1,4 +1,4 @@
-import { Checkbox, Table } from '@mantine/core';
+import { Checkbox, Skeleton, Table } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getAddresses } from '../../app/api/addresses';
@@ -7,6 +7,7 @@ const AddressConfirm = ({ setIdAddress }) => {
   const { user } = useSelector((user) => ({ ...user }));
   const [dataAddress, setDataAddress] = useState([]);
   const [value, setValue] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getDataAddresses();
@@ -18,9 +19,12 @@ const AddressConfirm = ({ setIdAddress }) => {
 
   const getDataAddresses = async () => {
     try {
+      setLoading(true);
       const { data } = await getAddresses(user.token);
       setDataAddress(data);
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       return err.response.data.message;
     }
   };
@@ -41,16 +45,18 @@ const AddressConfirm = ({ setIdAddress }) => {
 
   return (
     <>
-      <Table verticalSpacing='xs' style={{ marginTop: '1rem' }} withBorder>
-        <thead>
-          <tr>
-            <th></th>
-            <th>Nama</th>
-            <th>Detail</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </Table>
+      <Skeleton visible={loading}>
+        <Table verticalSpacing='xs' style={{ marginTop: '1rem' }} withBorder>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Nama</th>
+              <th>Detail</th>
+            </tr>
+          </thead>
+          <tbody>{rows}</tbody>
+        </Table>
+      </Skeleton>
     </>
   );
 };

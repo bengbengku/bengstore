@@ -1,4 +1,4 @@
-import { Badge, Text } from '@mantine/core';
+import { Badge, Skeleton, Text } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAddresses } from '../../app/api/addresses';
@@ -12,6 +12,7 @@ const Payment = ({ subtotal, idAddress, active }) => {
   const [total, setTotal] = useState(0);
   const [estimasi, setEstimasi] = useState('');
   const [courier, setCourier] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getDataAddresses();
@@ -19,6 +20,7 @@ const Payment = ({ subtotal, idAddress, active }) => {
 
   const getDataAddresses = async () => {
     try {
+      setLoading(true);
       const { data } = await getAddresses(user.token);
       const isFind = await data.find((obj) => obj._id === idAddress);
       setDataAddress(isFind);
@@ -61,7 +63,9 @@ const Payment = ({ subtotal, idAddress, active }) => {
         type: 'ADD_ORDER',
         payload: { idAddress: isFind._id, ongkir: dataValueOngkir, subtotal, total: hitungTotal },
       });
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       return err.response.data.message;
     }
   };
@@ -73,48 +77,50 @@ const Payment = ({ subtotal, idAddress, active }) => {
   });
 
   return (
-    <div className='confirm_wrapper'>
-      <div className='confirm_wrap'>
-        <Text className='confirm_text'>Alamat Penerima</Text>
-        <Text className='confirm_text'>
-          {`${dataAddress.detail}, ${dataAddress.kota}, ${dataAddress.provinsi}`}.
-        </Text>
+    <Skeleton visible={loading}>
+      <div className='confirm_wrapper'>
+        <div className='confirm_wrap'>
+          <Text className='confirm_text'>Alamat Penerima</Text>
+          <Text className='confirm_text'>
+            {`${dataAddress.detail}, ${dataAddress.kota}, ${dataAddress.provinsi}`}.
+          </Text>
+        </div>
+        <div className='confirm_wrap'>
+          <Text className='confirm_text'>Alamat Pengirim</Text>
+          <Text className='confirm_text'>
+            Jl. Pengadegan Timur I No.30, RT.6/RW.1, Pengadegan, Kec. Pancoran, Kota Jakarta
+            Selatan, Daerah Khusus Ibukota Jakarta 12770
+          </Text>
+        </div>
+        <div className='confirm_wrap'>
+          <Text className='confirm_text'>Subtotal</Text>
+          <Text className='confirm_text'>{formatter.format(subtotal)}</Text>
+        </div>
+        <div className='confirm_wrap'>
+          <Text className='confirm_text'>Ongkir</Text>
+          <Text className='confirm_text'>{`${formatter.format(
+            ongkir
+          )} (Est: ${estimasi} Hari)`}</Text>
+        </div>
+        <div className='confirm_wrap'>
+          <Text className='confirm_text'>Jasa Pengiriman</Text>
+          <Text className='confirm_text'>{courier}</Text>
+        </div>
+        <div className='confirm_wrap'>
+          <Text className='confirm_text'>Total</Text>
+          <Text className='confirm_text'>
+            <Badge
+              style={{ width: '100px' }}
+              variant='gradient'
+              gradient={{ from: 'orange', to: 'red' }}
+              size='lg'
+            >
+              {formatter.format(total)}
+            </Badge>
+          </Text>
+        </div>
       </div>
-      <div className='confirm_wrap'>
-        <Text className='confirm_text'>Alamat Pengirim</Text>
-        <Text className='confirm_text'>
-          Jl. Pengadegan Timur I No.30, RT.6/RW.1, Pengadegan, Kec. Pancoran, Kota Jakarta Selatan,
-          Daerah Khusus Ibukota Jakarta 12770
-        </Text>
-      </div>
-      <div className='confirm_wrap'>
-        <Text className='confirm_text'>Subtotal</Text>
-        <Text className='confirm_text'>{formatter.format(subtotal)}</Text>
-      </div>
-      <div className='confirm_wrap'>
-        <Text className='confirm_text'>Ongkir</Text>
-        <Text className='confirm_text'>{`${formatter.format(
-          ongkir
-        )} (Est: ${estimasi} Hari)`}</Text>
-      </div>
-      <div className='confirm_wrap'>
-        <Text className='confirm_text'>Jasa Pengiriman</Text>
-        <Text className='confirm_text'>{courier}</Text>
-      </div>
-      <div className='confirm_wrap'>
-        <Text className='confirm_text'>Total</Text>
-        <Text className='confirm_text'>
-          <Badge
-            style={{ width: '100px' }}
-            variant='gradient'
-            gradient={{ from: 'orange', to: 'red' }}
-            size='lg'
-          >
-            {formatter.format(total)}
-          </Badge>
-        </Text>
-      </div>
-    </div>
+    </Skeleton>
   );
 };
 
