@@ -9,6 +9,7 @@ import Checkout from '../../components/checkout';
 import Invoices from '../../components/checkout/Invoices';
 import Payment from '../../components/checkout/Payment';
 import HeaderLayout from '../../components/header';
+import EmptyCart from './EmptyCart';
 import './style.css';
 
 const Cart = () => {
@@ -63,44 +64,48 @@ const Cart = () => {
     <>
       <HeaderLayout />
       <Container mt='8rem'>
-        <div className='cart_wrapper'>
-          {isFinish ? (
-            <Invoices user={user} />
-          ) : (
-            <>
-              <Stepper active={active} onStepClick={setActive} breakpoint='sm'>
-                <Stepper.Step
-                  label='First step'
-                  description='Konfirmasi Orderan'
-                  allowStepSelect={active > 0}
-                >
-                  <Checkout cart={cart} setSubtotal={setSubtotal} />
-                </Stepper.Step>
-                <Stepper.Step
-                  label='Second step'
-                  description='Konfirmasi Alamat'
-                  allowStepSelect={active > 1}
-                >
-                  <AddressConfirm setIdAddress={setIdAddress} />
-                </Stepper.Step>
-                <Stepper.Step
-                  label='Final step'
-                  description='Konfirmasi Pembayaran'
-                  allowStepSelect={active > 2}
-                >
-                  <Payment subtotal={subtotal} idAddress={idAddress} active={active} />
-                </Stepper.Step>
-              </Stepper>
+        {cart && cart.length === 0 ? (
+          <EmptyCart />
+        ) : (
+          <div className='cart_wrapper'>
+            {isFinish ? (
+              <Invoices user={user} />
+            ) : (
+              <>
+                <Stepper active={active} onStepClick={setActive} breakpoint='sm'>
+                  <Stepper.Step
+                    label='First step'
+                    description='Konfirmasi Orderan'
+                    allowStepSelect={active > 0}
+                  >
+                    <Checkout cart={cart} setSubtotal={setSubtotal} />
+                  </Stepper.Step>
+                  <Stepper.Step
+                    label='Second step'
+                    description='Konfirmasi Alamat'
+                    allowStepSelect={active > 1}
+                  >
+                    <AddressConfirm setIdAddress={setIdAddress} />
+                  </Stepper.Step>
+                  <Stepper.Step
+                    label='Final step'
+                    description='Konfirmasi Pembayaran'
+                    allowStepSelect={active > 2}
+                  >
+                    <Payment subtotal={subtotal} idAddress={idAddress} active={active} />
+                  </Stepper.Step>
+                </Stepper>
 
-              <Group position='center' mt='xl' mb='xl'>
-                <Button variant='default' onClick={prevStep}>
-                  Kembali
-                </Button>
-                <Button onClick={nextStep}>Selanjutnya</Button>
-              </Group>
-            </>
-          )}
-        </div>
+                <Group position='center' mt='xl' mb='xl'>
+                  <Button variant='default' onClick={prevStep}>
+                    Kembali
+                  </Button>
+                  <Button onClick={nextStep}>Selanjutnya</Button>
+                </Group>
+              </>
+            )}
+          </div>
+        )}
       </Container>
     </>
   );
