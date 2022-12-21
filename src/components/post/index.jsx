@@ -1,15 +1,7 @@
-import {
-  Avatar,
-  Badge,
-  Button,
-  Card,
-  Container,
-  Group,
-  Image,
-  Skeleton,
-  Text,
-} from '@mantine/core';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Avatar, Badge, Button, Card, Group, Image, Text } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
+import { useScrollIntoView } from '@mantine/hooks';
 import { IconShoppingCartPlus } from '@tabler/icons';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -18,21 +10,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import { postStyles } from '../../styles/postStyles';
 import SkeletonCard from './SkeletonCard';
 
-const Post = () => {
+const Post = ({ page, setPages }) => {
   const items = useSelector((item) => item);
   const { cart } = items;
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const { classes } = postStyles();
   const [isLoading, setIsLoading] = useState(true);
+  const { scrollIntoView, targetRef } = useScrollIntoView({ offset: -3333 });
 
   useEffect(() => {
     getAllProduct();
-  }, []);
+    scrollIntoView({ alignment: 'end' });
+  }, [page]);
+
   const getAllProduct = async () => {
     try {
       setIsLoading(true);
-      const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/products`);
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/api/products?page=${page}`
+      );
+      const { pages: totalPages } = data;
+      setPages(totalPages);
       setData(data.data);
       setInterval(() => {
         setIsLoading(false);
@@ -42,6 +41,7 @@ const Post = () => {
       console.error(err);
     }
   };
+
   const formatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
@@ -82,7 +82,7 @@ const Post = () => {
   return (
     <>
       {data?.map((i) => (
-        <div key={i._id}>
+        <div key={i._id} ref={targetRef} style={{ position: 'relative' }}>
           {isLoading ? (
             <SkeletonCard i={i} />
           ) : (
