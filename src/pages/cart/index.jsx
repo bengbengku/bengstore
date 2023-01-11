@@ -16,11 +16,14 @@ const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { cart, user, order } = useSelector((item) => item);
+  const [isActive, isSetActive] = useState(false);
   const [active, setActive] = useState(0);
   const [subtotal, setSubtotal] = useState(0);
   const [idAddress, setIdAddress] = useState('');
 
-  const nextStep = () => setActive((current) => (current < 3 ? current + 1 : current));
+  const nextStep = () => {
+    setActive((current) => (current < 3 ? current + 1 : current));
+  };
   const prevStep = () => {
     setActive((current) => (current > 0 ? current - 1 : current));
   };
@@ -82,7 +85,7 @@ const Cart = () => {
                   description='Konfirmasi Alamat'
                   allowStepSelect={active > 1}
                 >
-                  <AddressConfirm setIdAddress={setIdAddress} />
+                  <AddressConfirm isSetActive={isSetActive} setIdAddress={setIdAddress} />
                 </Stepper.Step>
                 <Stepper.Step
                   label='Final step'
@@ -97,7 +100,9 @@ const Cart = () => {
                 <Button variant='default' onClick={prevStep}>
                   Kembali
                 </Button>
-                <Button onClick={nextStep}>Selanjutnya</Button>
+                <Button onClick={nextStep} disabled={isActive}>
+                  Selanjutnya
+                </Button>
               </Group>
             </>
           </div>

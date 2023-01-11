@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getAddresses } from '../../app/api/addresses';
 
-const AddressConfirm = ({ setIdAddress }) => {
+const AddressConfirm = ({ setIdAddress, isSetActive }) => {
   const { user } = useSelector((user) => ({ ...user }));
   const [dataAddress, setDataAddress] = useState([]);
   const [value, setValue] = useState('');
@@ -11,6 +11,7 @@ const AddressConfirm = ({ setIdAddress }) => {
 
   useEffect(() => {
     getDataAddresses();
+    isSetActive(true);
   }, []);
 
   useEffect(() => {
@@ -30,6 +31,7 @@ const AddressConfirm = ({ setIdAddress }) => {
   };
 
   const handleChange = (e) => {
+    isSetActive(e.target.checked ? false : true);
     setValue(e.target.checked ? e.target.value : '');
   };
 

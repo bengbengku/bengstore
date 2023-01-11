@@ -36,7 +36,7 @@ import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { headerStyles } from '../../styles/headerStyles';
 import RegisterModal from '../../pages/login/RegisterModal';
 import LoginModal from '../../pages/login/LoginModal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const mockdata = [
   {
@@ -61,9 +61,10 @@ const mockdata = [
   },
 ];
 
-const HeaderLayout = () => {
+const HeaderLayout = ({ setText }) => {
   const { user } = useSelector((user) => ({ ...user }));
   const { cart } = useSelector((cart) => cart);
+  const dispatch = useDispatch();
   const [isRegister, setIsRegister] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
@@ -71,8 +72,26 @@ const HeaderLayout = () => {
   const { classes, theme } = headerStyles();
   const largeScreen = useMediaQuery('(min-width: 1040px)');
 
+  const categoryHandler = (category) => {
+    dispatch({
+      type: 'ADD_CATEGORY',
+      payload: category.toLowerCase(),
+    });
+  };
+
+  const resetHandler = () => {
+    dispatch({
+      type: 'ADD_CATEGORY',
+      payload: '',
+    });
+  };
+
   const links = mockdata.map((item) => (
-    <UnstyledButton className={classes.subLink} key={item.title}>
+    <UnstyledButton
+      className={classes.subLink}
+      key={item.title}
+      onClick={() => categoryHandler(item.title)}
+    >
       <Group noWrap align='flex-start'>
         <ThemeIcon size={34} variant='default' radius='md'>
           <item.icon size={22} color={theme.fn.primaryColor()} />
@@ -136,8 +155,8 @@ const HeaderLayout = () => {
                 <HoverCard.Dropdown sx={{ overflow: 'hidden' }}>
                   <Group position='apart' px='md'>
                     <Text weight={500}>List Kategori</Text>
-                    <Anchor href='#' size='xs'>
-                      View all
+                    <Anchor href='#' size='xs' onClick={() => resetHandler()}>
+                      Reset Category
                     </Anchor>
                   </Group>
 
@@ -173,6 +192,7 @@ const HeaderLayout = () => {
                 rightSection={rightSection}
                 styles={{ rightSection: { pointerEvents: 'none' } }}
                 ml={8}
+                onChange={(e) => setText(e.target.value)}
               />
             </Group>
 

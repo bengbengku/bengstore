@@ -10,9 +10,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { postStyles } from '../../styles/postStyles';
 import SkeletonCard from './SkeletonCard';
 
-const Post = ({ page, setPages }) => {
+const Post = ({ page, setPages, selectedTags, text }) => {
   const items = useSelector((item) => item);
-  const { cart } = items;
+  const { cart, category } = items;
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const { classes } = postStyles();
@@ -22,13 +22,13 @@ const Post = ({ page, setPages }) => {
   useEffect(() => {
     getAllProduct();
     scrollIntoView({ alignment: 'end' });
-  }, [page]);
+  }, [page, selectedTags, category, text]);
 
   const getAllProduct = async () => {
     try {
       setIsLoading(true);
       const { data } = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/api/products?page=${page}`
+        `${process.env.REACT_APP_BACKEND_URL}/api/products?q=${text}&page=${page}&tag=${selectedTags}&category=${category}`
       );
       const { pages: totalPages } = data;
       setPages(totalPages);
