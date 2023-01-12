@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const getInvoice = async (orderId, token) => {
   try {
-    let { data } = await axios.get(`http://localhost:3001/api/invoices/${orderId}`, {
+    let { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/invoices/${orderId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

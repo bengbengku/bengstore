@@ -18,10 +18,10 @@ const DetailsProfile = () => {
     >
       <Avatar radius={120} mx='auto' size='xl' />
       <Text align='center' size='lg' weight={500} mt='md'>
-        {user.user.full_name}
+        {user?.user?.full_name}
       </Text>
       <Text align='center' color='dimmed' size='sm'>
-        {user.user.email}
+        {user?.user?.email}
       </Text>
 
       <Center>

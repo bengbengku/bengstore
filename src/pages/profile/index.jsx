@@ -7,8 +7,16 @@ import { profileStyles } from '../../styles/profileStyles';
 import DetailsProfile from '../../components/profile/DetailsProfile';
 import OrderStatus from '../../components/profile/OrderStatus';
 import Address from '../../components/profile/Address';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
+import { showNotification } from '@mantine/notifications';
 
 const Profile = () => {
+  const { user } = useSelector((state) => ({ ...state }));
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { classes, cx } = profileStyles();
   const [active, setActive] = useState('Profile');
 
@@ -27,6 +35,46 @@ const Profile = () => {
     </a>
   ));
 
+  const logout = async () => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/auth/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      Cookies.set('user', '');
+      dispatch({
+        type: 'LOGOUT',
+      });
+      showNotification({
+        title: 'Wooo..',
+        message: `${data.message}`,
+        styles: (theme) => ({
+          root: {
+            backgroundColor: theme.colors.red[6],
+            borderColor: theme.colors.red[6],
+
+            '&::before': { backgroundColor: theme.white },
+          },
+
+          title: { color: theme.white },
+          description: { color: theme.white },
+          closeButton: {
+            color: theme.white,
+            '&:hover': { backgroundColor: theme.colors.red[7] },
+          },
+        }),
+      });
+      navigate('/');
+    } catch (err) {
+      console.log(err.response.data.message);
+    }
+  };
+
   return (
     <>
       <HeaderLayout />
@@ -41,10 +89,10 @@ const Profile = () => {
           </Navbar.Section>
 
           <Navbar.Section className={classes.footer}>
-            <a href='#' className={classes.link} onClick={(event) => event.preventDefault()}>
+            <div className={classes.link} onClick={() => logout()}>
               <IconLogout className={classes.linkIcon} stroke={1.5} />
               <span>Logout</span>
-            </a>
+            </div>
           </Navbar.Section>
         </Navbar>
         {active === 'Profile' && <DetailsProfile />}

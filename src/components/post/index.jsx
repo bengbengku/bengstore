@@ -12,7 +12,7 @@ import SkeletonCard from './SkeletonCard';
 
 const Post = ({ page, setPages, selectedTags, text }) => {
   const items = useSelector((item) => item);
-  const { cart, category } = items;
+  const { cart, category, user } = items;
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const { classes } = postStyles();
@@ -74,8 +74,30 @@ const Post = ({ page, setPages, selectedTags, text }) => {
         }),
       });
     } else {
-      Cookies.set('cart', JSON.stringify([...cart, { ...item, qty: 1 }]));
-      dispatch({ type: 'ADD_CART', payload: { ...item, qty: 1 } });
+      if (!user || user === null) {
+        showNotification({
+          title: 'Oops...',
+          message: 'Silahkan login terlebih dahulu.. 🤥',
+          styles: (theme) => ({
+            root: {
+              backgroundColor: theme.colors.red[6],
+              borderColor: theme.colors.red[6],
+
+              '&::before': { backgroundColor: theme.white },
+            },
+
+            title: { color: theme.white },
+            description: { color: theme.white },
+            closeButton: {
+              color: theme.white,
+              '&:hover': { backgroundColor: theme.colors.red[7] },
+            },
+          }),
+        });
+      } else {
+        Cookies.set('cart', JSON.stringify([...cart, { ...item, qty: 1 }]));
+        dispatch({ type: 'ADD_CART', payload: { ...item, qty: 1 } });
+      }
     }
   };
 
