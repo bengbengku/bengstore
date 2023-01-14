@@ -25,7 +25,7 @@ const Tags = ({ tags, selectedTags, setSelectedTags, setPage }) => {
               </Chip>
             ))
           : Array.from(new Array(10), (val, i) => i + 1).map((id, i) => (
-              <Skeleton height={22} radius='xl' width='70px' />
+              <Skeleton key={i} height={22} radius='xl' width='70px' />
             ))}
       </Chip.Group>
     </div>
