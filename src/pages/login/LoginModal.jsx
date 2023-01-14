@@ -6,6 +6,7 @@ import { useForm } from '@mantine/form';
 import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { showNotification } from '@mantine/notifications';
 
 const LoginModal = ({ isLogin, setIsLogin }) => {
   const navigate = useNavigate();
@@ -37,6 +38,26 @@ const LoginModal = ({ isLogin, setIsLogin }) => {
           password: val.password,
         })
       );
+
+      showNotification({
+        title: 'Oops...',
+        message: `${data.message}.. 🤥`,
+        styles: (theme) => ({
+          root: {
+            backgroundColor: theme.colors.red[6],
+            borderColor: theme.colors.red[6],
+
+            '&::before': { backgroundColor: theme.white },
+          },
+
+          title: { color: theme.white },
+          description: { color: theme.white },
+          closeButton: {
+            color: theme.white,
+            '&:hover': { backgroundColor: theme.colors.red[7] },
+          },
+        }),
+      });
       dispatch({ type: 'LOGIN', payload: data });
       Cookies.set('user', JSON.stringify(data));
       setLoading(false);

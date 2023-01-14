@@ -1,12 +1,12 @@
 import { Button, Container, Group, Stepper } from '@mantine/core';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { cartItem } from '../../app/api/cartItem';
 import { orderUser } from '../../app/api/orderUser';
 import AddressConfirm from '../../components/addressConfirmation/AddressConfirm';
 import Checkout from '../../components/checkout';
-import Invoices from '../../components/checkout/Invoices';
 import Payment from '../../components/checkout/Payment';
 import HeaderLayout from '../../components/header';
 import EmptyCart from './EmptyCart';
@@ -14,13 +14,16 @@ import './style.css';
 
 const Cart = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { cart, user, order } = useSelector((item) => item);
+  const [isActive, isSetActive] = useState(false);
   const [active, setActive] = useState(0);
   const [subtotal, setSubtotal] = useState(0);
   const [idAddress, setIdAddress] = useState('');
-  const [isFinish, setIsFinish] = useState(false);
 
-  const nextStep = () => setActive((current) => (current < 3 ? current + 1 : current));
+  const nextStep = () => {
+    setActive((current) => (current < 3 ? current + 1 : current));
+  };
   const prevStep = () => {
     setActive((current) => (current > 0 ? current - 1 : current));
   };
@@ -44,7 +47,7 @@ const Cart = () => {
         order.total
       );
       dispatch({ type: 'UPDATE_ORDER', payload: res });
-      setIsFinish(true);
+      navigate('/invoice');
       // setActive(4);
     } catch (err) {
       return err.response.data.message;
@@ -68,42 +71,40 @@ const Cart = () => {
           <EmptyCart />
         ) : (
           <div className='cart_wrapper'>
-            {isFinish ? (
-              <Invoices user={user} />
-            ) : (
-              <>
-                <Stepper active={active} onStepClick={setActive} breakpoint='sm'>
-                  <Stepper.Step
-                    label='First step'
-                    description='Konfirmasi Orderan'
-                    allowStepSelect={active > 0}
-                  >
-                    <Checkout cart={cart} setSubtotal={setSubtotal} />
-                  </Stepper.Step>
-                  <Stepper.Step
-                    label='Second step'
-                    description='Konfirmasi Alamat'
-                    allowStepSelect={active > 1}
-                  >
-                    <AddressConfirm setIdAddress={setIdAddress} />
-                  </Stepper.Step>
-                  <Stepper.Step
-                    label='Final step'
-                    description='Konfirmasi Pembayaran'
-                    allowStepSelect={active > 2}
-                  >
-                    <Payment subtotal={subtotal} idAddress={idAddress} active={active} />
-                  </Stepper.Step>
-                </Stepper>
+            <>
+              <Stepper active={active} onStepClick={setActive} breakpoint='sm'>
+                <Stepper.Step
+                  label='First step'
+                  description='Konfirmasi Orderan'
+                  allowStepSelect={active > 0}
+                >
+                  <Checkout cart={cart} setSubtotal={setSubtotal} />
+                </Stepper.Step>
+                <Stepper.Step
+                  label='Second step'
+                  description='Konfirmasi Alamat'
+                  allowStepSelect={active > 1}
+                >
+                  <AddressConfirm isSetActive={isSetActive} setIdAddress={setIdAddress} />
+                </Stepper.Step>
+                <Stepper.Step
+                  label='Final step'
+                  description='Konfirmasi Pembayaran'
+                  allowStepSelect={active > 2}
+                >
+                  <Payment subtotal={subtotal} idAddress={idAddress} active={active} />
+                </Stepper.Step>
+              </Stepper>
 
-                <Group position='center' mt='xl' mb='xl'>
-                  <Button variant='default' onClick={prevStep}>
-                    Kembali
-                  </Button>
-                  <Button onClick={nextStep}>Selanjutnya</Button>
-                </Group>
-              </>
-            )}
+              <Group position='center' mt='xl' mb='xl'>
+                <Button variant='default' onClick={prevStep}>
+                  Kembali
+                </Button>
+                <Button onClick={nextStep} disabled={isActive}>
+                  Selanjutnya
+                </Button>
+              </Group>
+            </>
           </div>
         )}
       </Container>

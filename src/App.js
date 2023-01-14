@@ -6,6 +6,7 @@ import { MantineProvider } from '@mantine/core';
 import RegisterLanding from './components/registerLanding';
 import Profile from './pages/profile';
 import Cart from './pages/cart';
+import Invoices from './components/checkout/Invoices';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path='/landing' element={<RegisterLanding />} exact />
           <Route path='/profile' element={<Profile />} exact />
           <Route path='/cart' element={<Cart />} exact />
+          <Route path='/invoice' element={<Invoices />} exact />
         </Routes>
       </NotificationsProvider>
     </MantineProvider>

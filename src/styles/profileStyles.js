@@ -21,6 +21,7 @@ export const profileStyles = createStyles((theme, _params, getRef) => {
 
     link: {
       ...theme.fn.focusStyles(),
+      cursor: 'pointer',
       display: 'flex',
       alignItems: 'center',
       textDecoration: 'none',
