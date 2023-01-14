@@ -30,7 +30,12 @@ const Home = () => {
   return (
     <div>
       <HeaderLayout setText={setText} />
-      <Tags tags={tags} selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
+      <Tags
+        tags={tags}
+        selectedTags={selectedTags}
+        setPage={setPage}
+        setSelectedTags={setSelectedTags}
+      />
       <Center>
         <SimpleGrid
           cols={4}
@@ -42,7 +47,13 @@ const Home = () => {
             { maxWidth: 'xs', cols: 1, spacing: 'sm' },
           ]}
         >
-          <Post text={text} page={page} setPages={setPages} selectedTags={selectedTags} />
+          <Post
+            text={text}
+            page={page}
+            setPage={setPage}
+            setPages={setPages}
+            selectedTags={selectedTags}
+          />
         </SimpleGrid>
       </Center>
       <Center mt='1rem'>

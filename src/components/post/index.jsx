@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Avatar, Badge, Button, Card, Group, Image, Text } from '@mantine/core';
+import { Avatar, Badge, Button, Card, Center, Group, Image, Loader, Text } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { useScrollIntoView } from '@mantine/hooks';
 import { IconShoppingCartPlus } from '@tabler/icons';
@@ -103,6 +103,11 @@ const Post = ({ page, setPages, selectedTags, text }) => {
 
   return (
     <>
+      {data.length === 0 && (
+        <div style={{ position: 'fixed' }}>
+          <Loader size='xl' variant='dots' />
+        </div>
+      )}
       {data?.map((i) => (
         <div key={i._id} ref={targetRef} style={{ position: 'relative' }}>
           {isLoading ? (
