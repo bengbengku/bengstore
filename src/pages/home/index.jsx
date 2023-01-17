@@ -29,7 +29,7 @@ const Home = () => {
 
   return (
     <div>
-      <HeaderLayout setText={setText} />
+      <HeaderLayout setText={setText} setPage={setPage} />
       <Tags
         tags={tags}
         selectedTags={selectedTags}

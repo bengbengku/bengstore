@@ -1,7 +1,8 @@
-import { Checkbox, Skeleton, Table } from '@mantine/core';
+import { Center, Checkbox, Skeleton, Table, Text } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getAddresses } from '../../app/api/addresses';
+import { Link } from 'react-router-dom';
 
 const AddressConfirm = ({ setIdAddress, isSetActive }) => {
   const { user } = useSelector((user) => ({ ...user }));
@@ -45,19 +46,32 @@ const AddressConfirm = ({ setIdAddress, isSetActive }) => {
     </tr>
   ));
 
+  console.log(rows);
   return (
     <>
       <Skeleton visible={loading}>
-        <Table verticalSpacing='xs' style={{ marginTop: '1rem' }} withBorder>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Nama</th>
-              <th>Detail</th>
-            </tr>
-          </thead>
-          <tbody>{rows}</tbody>
-        </Table>
+        {dataAddress.length > 0 ? (
+          <Table verticalSpacing='xs' style={{ marginTop: '1rem' }} withBorder>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Nama</th>
+                <th>Detail</th>
+              </tr>
+            </thead>
+            <tbody>{rows}</tbody>
+          </Table>
+        ) : (
+          <Center>
+            <Text>
+              Silahkan tambahkan alamat pengiriman anda pada halaman profile,
+              <Link style={{ textDecoration: 'none' }} to='/profile'>
+                {' '}
+                klik disini.
+              </Link>
+            </Text>
+          </Center>
+        )}
       </Skeleton>
     </>
   );

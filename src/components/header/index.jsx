@@ -61,7 +61,7 @@ const mockdata = [
   },
 ];
 
-const HeaderLayout = ({ setText }) => {
+const HeaderLayout = ({ setText, setPage }) => {
   const { user } = useSelector((user) => ({ ...user }));
   const { cart } = useSelector((cart) => cart);
   const dispatch = useDispatch();
@@ -77,6 +77,7 @@ const HeaderLayout = ({ setText }) => {
       type: 'ADD_CATEGORY',
       payload: category.toLowerCase(),
     });
+    setPage(1);
   };
 
   const resetHandler = () => {

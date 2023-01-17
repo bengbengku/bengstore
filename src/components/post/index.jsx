@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Avatar, Badge, Button, Card, Center, Group, Image, Loader, Text } from '@mantine/core';
+import { Avatar, Badge, Button, Card, Group, Image, Loader, Text } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { useScrollIntoView } from '@mantine/hooks';
 import { IconShoppingCartPlus } from '@tabler/icons';
